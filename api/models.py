@@ -10,7 +10,7 @@ from api.managers import CustomUserManager
 class User(AbstractUser):
     username = None
     email = models.EmailField(('email address'), unique=True)
-    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -44,6 +44,11 @@ class Journal(BookJournalBase):
         FOOD = "FOOD"
         TRAVEL = "TRAVEL"
         SPORT = "SPORT"
+
+        def to_representation(self, obj):
+            if obj == '' and self.allow_blank:
+                return obj
+            return self._choices[obj]
 
     type = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in Type])
     publisher = models.CharField(max_length=255)
